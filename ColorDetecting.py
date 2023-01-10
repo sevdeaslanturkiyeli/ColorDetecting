@@ -10,11 +10,19 @@ while True:
     
     hsvFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     
-    lowerRed = np.array([0,145,145])
+    lowerRed = np.array([0,133,133])
     upperRed = np.array([10,255,255])
     redMask = cv2.inRange(hsvFrame, lowerRed, upperRed)
     
     red = cv2.bitwise_and(frame, frame, mask = redMask)
+    
+    contours, hierarchy = cv2.findContours(redMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    if len(contours) != 0:
+        for contour in contours:
+            if cv2.contourArea(contour) > 500:
+                x,y,w,h = cv2.boundingRect(contour)
+                cv2.rectangle(frame, (x,y), (x +w , y+h),(0,0,255),3)
     
     cv2.imshow("webcam", frame)
     cv2.imshow("Red Mask", redMask)

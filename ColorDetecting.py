@@ -23,6 +23,13 @@ while True:
             if cv2.contourArea(contour) > 500:
                 x,y,w,h = cv2.boundingRect(contour)
                 cv2.rectangle(frame, (x,y), (x +w , y+h),(0,0,255),3)
+                
+            M = cv2.moments(redMask)
+
+            cX = int(M["m10"] / M["m00"])
+            cY = int(M["m01"] / M["m00"])
+
+            cv2.circle(frame, (cX, cY), 3, (0, 0, 255), 3)     
     
     cv2.imshow("webcam", frame)
     cv2.imshow("Red Mask", redMask)
